@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano Visualization</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1 id="songTitle">🎹 Kiss The Rain</h1>
+            <p class="subtitle">Piano Visualization</p>
+        </header>
+
+        <div class="visualization-container">
+            <video id="liveVideo" autoplay playsinline muted></video>
+            <canvas id="notesCanvas"></canvas>
+            <div id="pianoKeyboard"></div>
+        </div>
+
+        <div class="controls">
+            <button id="playBtn" class="play-button">
+                <svg class="play-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z" />
+                </svg>
+                <svg class="pause-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
+                    style="display: none;">
+                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+                </svg>
+            </button>
+            <div class="song-selector">
+                <label for="songSelect">Song:</label>
+                <select id="songSelect" class="song-select">
+                    <option value="Kiss The Rain.mid" selected>Kiss The Rain</option>
+                    <option value="Yiruma - Rivers Flow In You.mid">River Flows In You</option>
+                </select>
+            </div>
+            <div class="speed-selector">
+                <label for="speedSelect">Speed:</label>
+                <select id="speedSelect" class="speed-select">
+                    <option value="0.5">0.5x</option>
+                    <option value="0.75">0.75x</option>
+                    <option value="1" selected>1x</option>
+                </select>
+            </div>
+            <div class="playstyle-selector">
+                <label for="playstyleSelect">Style:</label>
+                <select id="playstyleSelect" class="playstyle-select">
+                    <option value="fingers" selected>Fingers</option>
+                    <option value="palm">Palm</option>
+                </select>
+            </div>
+            <div class="instrument-selector">
+                <label for="instrumentSelect">Instrument:</label>
+                <select id="instrumentSelect" class="instrument-select">
+                    <option value="piano" selected>Piano</option>
+                    <option value="violin">Violin</option>
+                    <option value="guitar">Guitar</option>
+                    <option value="sax">Saxophone</option>
+                </select>
+            </div>
+            <div class="progress-container">
+                <div class="time current-time">0:00</div>
+                <input type="range" id="progressBar" class="progress-bar" min="0" max="100" value="0" step="0.1">
+                <div class="time total-time">0:00</div>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Loading MIDI file...</p>
+        </div>
+    </div>
+
+    <!-- Load libraries from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.28/build/Midi.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
