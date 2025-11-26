@@ -70,13 +70,14 @@ async function loadMIDI(filename) {
     midi = new Midi(arrayBuffer);
 
     const TEMPO_MULTIPLIER = 1 / currentSpeed;
+    const isJumpingMachine = filename.toLowerCase().includes('jumping machine');
 
     notes = [];
     midi.tracks.forEach((track, trackIndex) => {
         track.notes.forEach((note, idx) => {
             notes.push({
                 id: `${trackIndex}:${idx}`,
-                midi: note.midi,
+                midi: note.midi + (isJumpingMachine ? -6 : 0), // Transpose down half octave (6 semitones) for jumping machine
                 time: note.time * TEMPO_MULTIPLIER,
                 duration: note.duration * TEMPO_MULTIPLIER,
                 velocity: note.velocity,
@@ -392,10 +393,11 @@ function scheduleNotes() {
     Tone.Transport.cancel();
     harmonyNotes.forEach(note => {
         if (note.time >= currentTime) {
+            const safeDuration = Math.max(0.1, note.duration); // Ensure duration is at least 0.1 seconds
             Tone.Transport.schedule((time) => {
                 synth.triggerAttackRelease(
                     Tone.Frequency(note.midi, 'midi'),
-                    note.duration,
+                    safeDuration,
                     time,
                     note.velocity
                 );
@@ -504,7 +506,8 @@ function handleMelodyGate() {
 }
 
 function playMelodyNote(note) {
-    synth.triggerAttackRelease(Tone.Frequency(note.midi, 'midi'), note.duration, undefined, note.velocity);
+    const safeDuration = Math.max(0.1, note.duration); // Ensure duration is at least 0.1 seconds
+    synth.triggerAttackRelease(Tone.Frequency(note.midi, 'midi'), safeDuration, undefined, note.velocity);
     playedMelodyIds.add(note.id);
     touchedMelodyCount++;
 }
@@ -764,13 +767,13 @@ async function initAudio() {
 }
 
 function setInstrument(name) {
-    try { Tone.Transport.cancel(); } catch {}
+    try { Tone.Transport.cancel(); } catch { }
     if (synth && !synth.disposed) {
-        try { synth.dispose(); } catch {}
+        try { synth.dispose(); } catch { }
     }
-    if (master && !master.disposed) { try { master.dispose(); } catch {} }
-    if (compressor && !compressor.disposed) { try { compressor.dispose(); } catch {} }
-    if (limiter && !limiter.disposed) { try { limiter.dispose(); } catch {} }
+    if (master && !master.disposed) { try { master.dispose(); } catch { } }
+    if (compressor && !compressor.disposed) { try { compressor.dispose(); } catch { } }
+    if (limiter && !limiter.disposed) { try { limiter.dispose(); } catch { } }
 
     const voices = {
         piano: {
