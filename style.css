@@ -1,15 +1,29 @@
+/*
+ * ===================================================================
+ * PIANO VISUALIZATION GAME - STYLES
+ * Interactive rhythm game with hand tracking and MIDI playback
+ * ===================================================================
+ */
+
+/* ==================== GLOBAL RESET ==================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* ==================== BODY & CONTAINER ==================== */
 body {
     font-family: 'Inter', sans-serif;
+    /* Modern Google Font */
     background: #000;
+    /* Pure black background */
     color: #ffffff;
+    /* White text */
     min-height: 100vh;
+    /* Full viewport height */
     overflow: hidden;
+    /* Prevent scrolling */
 }
 
 .container {
@@ -19,6 +33,7 @@ body {
     flex-direction: column;
 }
 
+/* ==================== HEADER ==================== */
 header {
     position: absolute;
     top: 0;
@@ -26,14 +41,17 @@ header {
     width: 100%;
     text-align: center;
     padding: 20px;
+    /* Gradient fade from black to transparent */
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
     z-index: 10;
     pointer-events: none;
+    /* Allow clicks to pass through to elements below */
 }
 
 h1 {
     font-size: 2.5rem;
     font-weight: 700;
+    /* Purple gradient text effect */
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -47,13 +65,16 @@ h1 {
     font-weight: 400;
 }
 
+/* ==================== VISUALIZATION AREA ==================== */
 .visualization-container {
     flex: 1;
+    /* Take remaining vertical space */
     position: relative;
     overflow: hidden;
     background: #000;
 }
 
+/* Live camera feed (mirrored for natural interaction) */
 #liveVideo {
     position: absolute;
     top: 0;
@@ -61,12 +82,15 @@ h1 {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /* Scale to cover entire area */
     transform: scaleX(-1);
+    /* Mirror horizontally */
     z-index: 0;
     opacity: 0;
-    /* Hide camera feed */
+    /* Hidden but used for hand tracking */
 }
 
+/* Canvas for falling notes visualization */
 #notesCanvas {
     position: absolute;
     top: 0;
@@ -75,8 +99,10 @@ h1 {
     height: 100%;
     z-index: 1;
     pointer-events: none;
+    /* Allow clicks to pass through */
 }
 
+/* Piano keyboard container */
 #pianoKeyboard {
     position: absolute;
     bottom: 0;
@@ -87,7 +113,7 @@ h1 {
     display: flex;
     justify-content: center;
     opacity: 0;
-    /* Hide piano keys but keep for collision */
+    /* Hidden but used for collision detection */
 }
 
 .piano-keys-container {
@@ -96,35 +122,44 @@ h1 {
     display: flex;
 }
 
+/* ==================== PIANO KEYS ==================== */
 .piano-key {
     position: relative;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 0 0 5px 5px;
+    cursor: pointer;
     transition: all 0.1s ease;
 }
 
+/* White keys */
 .piano-key.white {
-    background: rgba(255, 255, 255, 0.9);
     width: 30px;
     height: 100%;
-    z-index: 1;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+/* Black keys */
 .piano-key.black {
-    background: rgba(0, 0, 0, 0.9);
+    position: absolute;
     width: 20px;
     height: 60%;
-    z-index: 2;
-    position: absolute;
-    top: 0;
+    background: linear-gradient(180deg, #333 0%, #000 100%);
+    border: 1px solid #000;
+    border-radius: 0 0 3px 3px;
+    z-index: 3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
-.piano-key.active {
+/* Key press visual feedback */
+.piano-key:active {
     transform: translateY(2px);
 }
 
+/* Active state when note is played */
 .piano-key.white.active {
     background: #a78bfa;
+    /* Purple highlight */
     box-shadow: 0 0 15px rgba(167, 139, 250, 0.5);
 }
 
@@ -133,7 +168,7 @@ h1 {
     box-shadow: 0 0 20px rgba(192, 132, 252, 0.8), 0 0 40px rgba(168, 85, 247, 0.6);
 }
 
-/* Note Labels */
+/* Note labels (e.g., "C4", "D#5") */
 .note-label {
     position: absolute;
     bottom: 10px;
@@ -156,7 +191,7 @@ h1 {
     font-size: 9px;
 }
 
-/* Controls */
+/* ==================== CONTROLS PANEL ==================== */
 .controls {
     position: absolute;
     bottom: 50%;
@@ -165,6 +200,7 @@ h1 {
     width: 90%;
     max-width: 600px;
     padding: 15px 25px;
+    /* Glassmorphism effect */
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(10px);
     border-radius: 50px;
@@ -176,12 +212,14 @@ h1 {
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
+/* Hidden state for controls */
 .controls.hidden {
     opacity: 0;
     pointer-events: none;
     transform: translate(-50%, 50%) scale(0.8);
 }
 
+/* ==================== PLAY BUTTON ==================== */
 .play-button {
     width: 50px;
     height: 50px;
@@ -198,11 +236,88 @@ h1 {
     flex-shrink: 0;
 }
 
+.play-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.play-button:active {
+    transform: scale(0.95);
+}
+
+/* ==================== SELECTORS (Song, Speed, Style, Instrument) ==================== */
+.song-selector,
+.speed-selector,
+.playstyle-selector,
+.instrument-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.song-selector label,
+.speed-selector label,
+.playstyle-selector label,
+.instrument-selector label {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+}
+
+.song-select,
+.speed-select,
+.playstyle-select,
+.instrument-select {
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.85rem;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.song-select:hover,
+.speed-select:hover,
+.playstyle-select:hover,
+.instrument-select:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.song-select:focus,
+.speed-select:focus,
+.playstyle-select:focus,
+.instrument-select:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(102, 126, 234, 0.6);
+}
+
+.song-select option,
+.speed-select option,
+.playstyle-select option,
+.instrument-select option {
+    background: #1a1a2e;
+    color: #fff;
+}
+
+/* ==================== PROGRESS BAR ====================*/
+.progress-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
 
 .time {
     font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.9);
     font-variant-numeric: tabular-nums;
+    /* Monospace numbers */
     min-width: 40px;
 }
 
@@ -217,6 +332,7 @@ h1 {
     cursor: pointer;
 }
 
+/* Style the slider thumb (Chrome/Safari) */
 .progress-bar::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
@@ -233,6 +349,7 @@ h1 {
     transform: scale(1.3);
 }
 
+/* Style the slider thumb (Firefox) */
 .progress-bar::-moz-range-thumb {
     width: 12px;
     height: 12px;
@@ -244,7 +361,7 @@ h1 {
     transition: all 0.2s ease;
 }
 
-/* Loading Screen */
+/* ==================== LOADING SCREEN ==================== */
 .loading {
     position: fixed;
     top: 0;
@@ -264,6 +381,7 @@ h1 {
     display: none;
 }
 
+/* Spinning loader animation */
 .spinner {
     width: 60px;
     height: 60px;
@@ -289,7 +407,7 @@ h1 {
     color: rgba(255, 255, 255, 0.9);
 }
 
-/* Responsive Design */
+/* ==================== RESPONSIVE DESIGN ==================== */
 @media (max-width: 768px) {
     h1 {
         font-size: 1.8rem;
@@ -311,49 +429,4 @@ h1 {
         width: 95%;
         padding: 10px 15px;
     }
-}
-
-.play-button:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-}
-
-.play-button:active {
-    transform: scale(0.95);
-}
-
-.speed-selector {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-}
-
-.speed-selector label {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 500;
-}
-
-.speed-select {
-    padding: 6px 10px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    color: #fff;
-    font-size: 0.85rem;
-    font-family: 'Inter', sans-serif;
-    cursor: pointer;
-    outline: none;
-    transition: all 0.3s ease;
-}
-
-.song-select:focus {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(102, 126, 234, 0.6);
-}
-
-.song-select option {
-    background: #1a1a2e;
-    color: #fff;
 }
