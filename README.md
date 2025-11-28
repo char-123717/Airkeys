@@ -215,12 +215,6 @@ Press `Ctrl + C`
 
 ---
 
-### 3. Open in Browser
-
-1. Open browser (Chrome/Edge recommended)
-2. Type in address bar: `http://localhost:8000` or `http://127.0.0.1:8000`
-3. Allow camera access when prompted
-
 ## 🎮 How to Play
 
 ### Initial Setup
