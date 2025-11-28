@@ -4,7 +4,7 @@ An interactive piano rhythm game that uses hand tracking to play piano songs in 
 
 ## ✨ Features
 
-- 🎵 **4 Piano Songs**: Kiss The Rain, River Flows In You, 7 Years, and Jumping Machine
+- 🎵 **4 Piano Songs**: Kiss The Rain, River Flows In You, 7 Years, Jumping Machine and 你，好不好
 - 🎸 **4 Instruments**: Piano, Violin, Guitar, and Saxophone
 - 👋 **Hand Tracking**: Uses MediaPipe for real-time hand detection
 - 🎯 **Two Play Modes**:
