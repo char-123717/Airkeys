@@ -4,12 +4,13 @@ An interactive piano rhythm game that uses hand tracking to play piano songs in 
 
 ## ✨ Features
 
-- 🎵 **4 Piano Songs**: Kiss The Rain, River Flows In You, 7 Years, and Jumping Machine
-- 🎸 **4 Instruments**: Piano, Violin, Guitar, and Saxophone
+- 🎵 **6 Piano Songs**: Kiss The Rain, River Flows In You, 7 Years, Jumping Machine, Ni Hao Bu Hao, and Zen Me Le
+- 🎸 **5 Instruments**: Piano, Violin, Guitar, Flute, and Saxophone
 - 👋 **Hand Tracking**: Uses MediaPipe for real-time hand detection
-- 🎯 **Two Play Modes**:
+- 🎯 **Three Play Modes**:
   - **Fingers Mode**: Play with fingertips (5 points)
   - **Palm Mode**: Play with entire hand (21 landmarks)
+  - **Solid hand mode**: Play with entire hand 
 - ⚡ **Speed Control**: 0.5x, 0.75x, and 1x
 - 📊 **Scoring System**: Calculate accuracy and achieve ratings (Perfect, Great, Good, Miss)
 - 🎨 **Visual Effects**: Falling notes with glow effects
@@ -18,7 +19,7 @@ An interactive piano rhythm game that uses hand tracking to play piano songs in 
 ## 🛠️ Technologies Used
 
 - **HTML5 Canvas**: For rendering falling notes and visualization
-- **Tone.js**: Audio synthesis and MIDI playback
+- **Web Audio API**: Audio playback using .wav samples per note per instrument
 - **MediaPipe Hands**: Real-time hand tracking
 - **Vanilla JavaScript**: Game logic and interactions
 - **CSS3**: UI styling and animations
@@ -332,6 +333,33 @@ Accuracy is calculated from the percentage of melody notes you successfully touc
 d:/song/
 ├── assets/
 │   └── midi/          # MIDI song files
+│     └── Kiss The Rain.mid
+│     └── Yiruma -River Flows In You.mid
+│     └── 7 years.mid
+│     └── jumping machine.mid
+│     └── ni hao bu hao.mid
+│     └── zen me le.mid
+│   └── soundfonts/ 
+│     └── piano/        # Piano soundfont files (.wav)
+│        └── C2.wav     
+│        └── Cs2.wav    
+│        └── etc...
+│     └── violin/       # Violin soundfont files (.wav)
+|         └── C2.wav     
+│        └── Cs2.wav    
+│        └── etc...   
+│     └── guitar/      # Guitar soundfont files (.wav)
+|         └── C2.wav     
+│        └── Cs2.wav    
+│        └── etc...
+│     └── flute/       # Flute soundfont files (.wav)
+|         └── C2.wav     
+│        └── Cs2.wav    
+│        └── etc...
+│     └── saxophone/   # Saxophone soundfont files (.wav)
+|         └── C2.wav     
+│        └── Cs2.wav    
+│        └── etc...
 ├── css/
 │   └── style.css      # Styling and animations
 ├── js/
@@ -345,6 +373,7 @@ d:/song/
 │   ├── state.js       # Global state management
 │   └── ui.js          # UI controls and interactions
 ├── index.html         # Main HTML structure
+├── package-lock.json  # Project dependencies
 └── README.md          # This documentation
 ```
 

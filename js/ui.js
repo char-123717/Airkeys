@@ -98,6 +98,10 @@ export function formatTime(seconds) {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 
+export function setTotalTime(seconds) {
+    document.querySelector('.total-time').textContent = formatTime(seconds);
+}
+
 export function formatSongTitle(filename) {
     return filename.replace('.mid', '')
         .replace('Yiruma - ', '')

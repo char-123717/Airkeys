@@ -4,13 +4,19 @@ const liveVideo = document.getElementById('liveVideo');
 const canvas = document.getElementById('notesCanvas');
 
 export async function initCameraAndHands() {
+    console.log('initCameraAndHands: Requesting user media...');
     const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'user' },
         audio: false
     });
-    liveVideo.srcObject = stream;
-    await liveVideo.play();
+    console.log('initCameraAndHands: Stream obtained');
 
+    liveVideo.srcObject = stream;
+    console.log('initCameraAndHands: Playing video...');
+    await liveVideo.play();
+    console.log('initCameraAndHands: Video playing');
+
+    console.log('initCameraAndHands: Initializing Hands...');
     state.hands = new Hands({
         locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
     });
@@ -23,7 +29,9 @@ export async function initCameraAndHands() {
     });
 
     state.hands.onResults(onHandsResults);
+    console.log('initCameraAndHands: Hands initialized');
 
+    console.log('initCameraAndHands: Starting Camera...');
     const camera = new Camera(liveVideo, {
         onFrame: async () => {
             await state.hands.send({ image: liveVideo });
@@ -31,7 +39,9 @@ export async function initCameraAndHands() {
         width: 640,
         height: 480
     });
-    camera.start();
+
+    await camera.start();
+    console.log('initCameraAndHands: Camera started');
 }
 
 export function mapCoordinates(x, y) {
@@ -112,6 +122,40 @@ function onHandsResults(results) {
                         state.allFingerPoints.push(mapped);
                     }
                 }
+            } else if (state.currentPlaystyle === 'solid') {
+                // Use all 21 landmarks
+                for (let i = 0; i < 21; i++) {
+                    const point = smoothedLandmarks[i];
+                    if (point && point.x !== undefined && point.y !== undefined) {
+                        const mapped = mapCoordinates(point.x, point.y);
+                        state.allFingerPoints.push(mapped);
+                    }
+                }
+
+                // Interpolate between connected landmarks to create a "solid" hand
+                const connections = [
+                    [0, 1], [1, 2], [2, 3], [3, 4],  // Thumb
+                    [0, 5], [5, 6], [6, 7], [7, 8],  // Index
+                    [0, 9], [9, 10], [10, 11], [11, 12],  // Middle
+                    [0, 13], [13, 14], [14, 15], [15, 16],  // Ring
+                    [0, 17], [17, 18], [18, 19], [19, 20],  // Pinky
+                    [5, 9], [9, 13], [13, 17]  // Palm connections
+                ];
+
+                connections.forEach(([a, b]) => {
+                    const pointA = smoothedLandmarks[a];
+                    const pointB = smoothedLandmarks[b];
+
+                    if (pointA && pointB && pointA.x !== undefined && pointB.x !== undefined) {
+                        // Interpolate 3 points between each connection
+                        for (let t = 0.25; t <= 0.75; t += 0.25) {
+                            const interpX = pointA.x * (1 - t) + pointB.x * t;
+                            const interpY = pointA.y * (1 - t) + pointB.y * t;
+                            const mapped = mapCoordinates(interpX, interpY);
+                            state.allFingerPoints.push(mapped);
+                        }
+                    }
+                });
             }
         });
     } else {

@@ -1,7 +1,7 @@
 import { state } from './state.js';
-import { scheduleNotes, playMelodyNote, initAudio, setInstrument } from './audio.js';
+import { scheduleNotes, playMelodyNote, initAudio, setInstrument, stopAllNotes } from './audio.js';
 import { loadMIDI } from './midi.js';
-import { createPianoKeyboard, setupControls, updateProgress, showEndScreen, formatSongTitle } from './ui.js';
+import { createPianoKeyboard, setupControls, updateProgress, showEndScreen, formatSongTitle, setTotalTime } from './ui.js';
 import { drawFallingNotes, drawHitZone, drawDebugInfo, drawHandSkeleton, resizeCanvas } from './render.js';
 import { initCameraAndHands } from './input.js';
 import { WHITE_KEY_WIDTH, BLACK_KEY_WIDTH } from './config.js';
@@ -10,12 +10,29 @@ const canvas = document.getElementById('notesCanvas');
 const ctx = canvas.getContext('2d');
 
 export async function init() {
+    console.log('init: Started');
+    const loadingText = document.querySelector('#loading p');
+    if (loadingText) loadingText.textContent = "Starting...";
+
     try {
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
+        if (loadingText) loadingText.textContent = "Loading MIDI...";
+        console.log('init: Loading MIDI...');
         await loadMIDI(state.currentSong);
-        await initAudio();
+        await loadMIDI(state.currentSong);
+        console.log('init: MIDI loaded');
+        setTotalTime(state.duration);
+
+        // Initialize audio with progress callback
+        console.log('init: Loading audio...');
+        await initAudio((loaded, total) => {
+            const percent = Math.round((loaded / total) * 100);
+            if (loadingText) loadingText.textContent = `Loading Piano... ${percent}% (${loaded}/${total})`;
+        });
+        console.log('init: Audio loaded');
+
         createPianoKeyboard();
 
         setupControls({
@@ -31,6 +48,7 @@ export async function init() {
                 state.playedMelodyIds.clear();
                 state.touchedMelodyCount = 0;
                 updateProgress();
+                setTotalTime(state.duration);
                 document.getElementById('songTitle').textContent = `🎹 ${formatSongTitle(song)}`;
             },
             onSpeedChange: async (speed) => {
@@ -43,22 +61,40 @@ export async function init() {
                     await startPlayback();
                 }
                 updateProgress();
+                setTotalTime(state.duration);
             },
-            onInstrumentChange: (instrument) => {
+            onInstrumentChange: async (instrument) => {
                 const wasPlaying = state.isPlaying;
                 if (wasPlaying) pausePlayback();
-                setInstrument(instrument);
+                await setInstrument(instrument);
+                if (wasPlaying) await startPlayback();
             }
         });
 
-        await initCameraAndHands();
-        document.getElementById('loading').classList.add('hidden');
+        // Initialize Camera
+        loadingText.textContent = "Initializing Camera...";
+        console.log('init: Initializing camera...');
+        try {
+            await initCameraAndHands();
+            console.log('init: Camera initialized');
+        } catch (cameraError) {
+            console.warn("Camera initialization failed:", cameraError);
+            alert("Camera failed to initialize. You can still play, but hand tracking won't work.\nError: " + cameraError.message);
+        }
+
+        console.log('init: Hiding loading screen');
+        const loadingScreen = document.getElementById('loading');
+        if (loadingScreen) {
+            loadingScreen.classList.add('hidden');
+            loadingScreen.style.display = 'none'; // Force hide
+        }
         animate();
     } catch (error) {
         console.error('Initialization error:', error);
         document.getElementById('loading').innerHTML = `
             <div class="spinner"></div>
             <p>Error: ${error.message}</p>
+            <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; border-radius: 5px; border: none; background: #667eea; color: white; cursor: pointer;">Retry</button>
         `;
     }
 }
@@ -72,7 +108,10 @@ export async function togglePlayback() {
 }
 
 export async function startPlayback() {
-    await Tone.start();
+    // Resume AudioContext if suspended
+    if (state.audioContext && state.audioContext.state === 'suspended') {
+        await state.audioContext.resume();
+    }
 
     document.querySelector('.controls').classList.add('hidden');
     const countdownEl = document.getElementById('countdown');
@@ -94,7 +133,9 @@ export async function startPlayback() {
 
             state.isPlaying = true;
             state.gatedPause = false;
-            Tone.Transport.seconds = state.currentTime;
+
+            // Set start time for Web Audio API
+            state.startTime = state.audioContext.currentTime - state.currentTime;
 
             document.querySelector('.play-icon').style.display = 'none';
             document.querySelector('.pause-icon').style.display = 'block';
@@ -106,9 +147,10 @@ export async function startPlayback() {
 
 export function pausePlayback() {
     state.isPlaying = false;
-    state.currentTime = Tone.Transport.seconds;
-    Tone.Transport.stop();
-    Tone.Transport.cancel();
+    state.pauseTime = state.audioContext ? state.audioContext.currentTime : 0;
+
+    // Stop all scheduled notes
+    stopAllNotes();
 
     document.querySelector('.play-icon').style.display = 'block';
     document.querySelector('.pause-icon').style.display = 'none';
@@ -116,7 +158,6 @@ export function pausePlayback() {
 
 export function seekTo(time) {
     state.currentTime = Math.max(0, Math.min(time, state.duration));
-    Tone.Transport.seconds = state.currentTime;
 
     state.playedMelodyIds.clear();
     state.touchedMelodyCount = 0;
@@ -201,8 +242,10 @@ function handleMelodyGate() {
 }
 
 export function animate() {
-    if (state.isPlaying) {
-        state.currentTime = Tone.Transport.seconds;
+    if (state.isPlaying && state.audioContext) {
+        // Calculate current time from AudioContext
+        state.currentTime = state.audioContext.currentTime - state.startTime;
+
         if (state.currentTime >= state.duration) {
             state.currentTime = state.duration;
             pausePlayback();

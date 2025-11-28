@@ -1,27 +1,40 @@
 export const state = {
+    // Audio
+    audioContext: null,
+    instrument: null,
+    currentInstrument: 'acoustic_grand_piano',
+
+    // Timing
+    startTime: 0,
+    pauseTime: 0,
+    currentTime: 0,
+
+    // MIDI
     midi: null,
-    synth: null,
     notes: [],
     melodyNotes: [],
     harmonyNotes: [],
+    duration: 0,
+
+    // Playback
     isPlaying: false,
     gatedPause: false,
-    currentTime: 0,
-    duration: 0,
     currentSpeed: 1,
-    currentPlaystyle: 'fingers',
     currentSong: 'Kiss The Rain.mid',
-    pianoKeys: [],
-    allFingerPoints: [],
-    allHandsLandmarks: [],
+
+    // Tracking
     playedMelodyIds: new Set(),
     touchedMelodyCount: 0,
-    finalScore: 0,
+    scheduledNotes: [],
 
-    // Audio nodes
-    master: null,
-    compressor: null,
-    limiter: null,
+    // UI
+    pianoKeys: [],
+
+    // Hand tracking
+    hands: null,
+    allFingerPoints: [],
+    allHandsLandmarks: [],
+    currentPlaystyle: 'fingers',
 
     // Animation
     animationFrameId: null

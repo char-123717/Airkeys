@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<!DOCTYPE html>
-<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -63,8 +61,9 @@
                     <option value="Kiss The Rain.mid" selected>Kiss The Rain</option>
                     <option value="Yiruma - Rivers Flow In You.mid">River Flows In You</option>
                     <option value="7 years.mid">7 Years</option>
-                    <option value="jumping machine.mid">Jumping Machine</option>
-                    <option value="ni hao bu hao.mid">Ni Hao Bu Hao</option>
+                    <option value="jumping machine.mid">Jumping Machine 跳樓機</option>
+                    <option value="ni hao bu hao.mid">Ni Hao Bu Hao 你好不好</option>
+                    <option value="zen me le.mid">Zen Me Le 怎麽了</option>
                 </select>
             </div>
 
@@ -74,8 +73,8 @@
                 <select id="speedSelect" class="speed-select">
                     <!-- Speed multipliers for difficulty adjustment -->
                     <option value="0.5">0.5x</option>
-                    <option value="0.75">0.75x</option>
-                    <option value="1" selected>1x</option>
+                    <option value="0.75" selected>0.75x</option>
+                    <option value="1">1x</option>
                 </select>
             </div>
 
@@ -87,6 +86,8 @@
                     <option value="fingers" selected>Fingers</option>
                     <!-- Palm: Use all 21 hand landmarks for easier gameplay -->
                     <option value="palm">Palm</option>
+                    <!-- Solid: Interpolates points between landmarks for maximum coverage -->
+                    <option value="solid">Solid Hand</option>
                 </select>
             </div>
 
@@ -94,11 +95,12 @@
             <div class="instrument-selector">
                 <label for="instrumentSelect">Instrument:</label>
                 <select id="instrumentSelect" class="instrument-select">
-                    <!-- Different synthesizer voices -->
-                    <option value="piano" selected>Piano</option>
+                    <!-- Different soundfont instruments -->
+                    <option value="acoustic_grand_piano" selected>Piano</option>
                     <option value="violin">Violin</option>
-                    <option value="guitar">Guitar</option>
-                    <option value="sax">Saxophone</option>
+                    <option value="acoustic_guitar_nylon">Guitar</option>
+                    <option value="flute">flute</option>
+                    <option value="saxophone">Saxophone</option>
                 </select>
             </div>
 
@@ -111,7 +113,7 @@
                 <input type="range" id="progressBar" class="progress-bar" min="0" max="100" value="0" step="0.1">
 
                 <!-- Total song duration -->
-                <div class="time total-time">0:00</div>
+                <div class="time total-time"></div>
             </div>
         </div>
 
@@ -119,7 +121,7 @@
         <!-- Displayed while MIDI file is loading -->
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p>Loading MIDI file...</p>
+            <p>Loading</p>
         </div>
 
         <!-- Countdown Overlay -->
@@ -129,11 +131,8 @@
     <!-- ==================== EXTERNAL LIBRARIES ==================== -->
     <!-- Load from CDN for audio synthesis and hand tracking -->
 
-    <!-- Tone.js - Audio synthesis and MIDI playback -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-
-    <!-- @tonejs/midi - MIDI file parsing -->
-    <script src="https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.28/build/Midi.js"></script>
+    <!-- MIDI Parser - MIDI file parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/midi-parser-js@4.0.4/src/main.js"></script>
 
     <!-- MediaPipe Camera Utils - Camera handling -->
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
