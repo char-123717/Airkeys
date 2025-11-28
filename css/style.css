@@ -197,8 +197,8 @@ h1 {
     bottom: 50%;
     left: 50%;
     transform: translate(-50%, 50%);
-    width: 90%;
-    max-width: 600px;
+    width: fit-content;
+    max-width: 95%;
     padding: 15px 25px;
     /* Glassmorphism effect */
     background: rgba(0, 0, 0, 0.6);
@@ -207,7 +207,7 @@ h1 {
     border: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 12px;
     z-index: 10;
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
@@ -252,7 +252,7 @@ h1 {
 .instrument-selector {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     flex-shrink: 0;
 }
 
@@ -260,25 +260,27 @@ h1 {
 .speed-selector label,
 .playstyle-selector label,
 .instrument-selector label {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.9);
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .song-select,
 .speed-select,
 .playstyle-select,
 .instrument-select {
-    padding: 6px 10px;
+    padding: 6px 8px;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
     color: #fff;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-family: 'Inter', sans-serif;
     cursor: pointer;
     outline: none;
     transition: all 0.3s ease;
+    max-width: 150px;
 }
 
 .song-select:hover,
@@ -310,15 +312,17 @@ h1 {
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
+    min-width: 150px;
 }
 
 .time {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.9);
     font-variant-numeric: tabular-nums;
     /* Monospace numbers */
-    min-width: 40px;
+    min-width: 35px;
+    text-align: center;
 }
 
 .progress-bar {
@@ -407,6 +411,35 @@ h1 {
     color: rgba(255, 255, 255, 0.9);
 }
 
+/* ==================== COUNTDOWN OVERLAY ==================== */
+.countdown {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 150px;
+    font-weight: 800;
+    color: #ffffff;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+    z-index: 100;
+    pointer-events: none;
+    animation: pulse 0.5s ease-in-out infinite alternate;
+}
+
+.countdown.hidden {
+    display: none;
+}
+
+@keyframes pulse {
+    from {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    to {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
 /* ==================== RESPONSIVE DESIGN ==================== */
 @media (max-width: 768px) {
     h1 {
@@ -428,5 +461,7 @@ h1 {
     .controls {
         width: 95%;
         padding: 10px 15px;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 }

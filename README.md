@@ -326,10 +326,32 @@ Press `Ctrl + C`
 
 Accuracy is calculated from the percentage of melody notes you successfully touched.
 
+## 📁 File Structure
+
+```
+d:/song/
+├── assets/
+│   └── midi/          # MIDI song files
+├── css/
+│   └── style.css      # Styling and animations
+├── js/
+│   ├── audio.js       # Audio synthesis logic
+│   ├── config.js      # Constants and configuration
+│   ├── game.js        # Core game loop and logic
+│   ├── input.js       # Camera and hand tracking
+│   ├── main.js        # Entry point
+│   ├── midi.js        # MIDI file loading and parsing
+│   ├── render.js      # Canvas rendering
+│   ├── state.js       # Global state management
+│   └── ui.js          # UI controls and interactions
+├── index.html         # Main HTML structure
+└── README.md          # This documentation
+```
+
 ## 🎼 Adding New Songs
 
 1. Prepare MIDI file (`.mid` format)
-2. Place file in `d:/song/` folder
+2. Place file in `d:/song/assets/midi/` folder
 3. Edit `index.html`, add new option:
 
 ```html
@@ -337,40 +359,6 @@ Accuracy is calculated from the percentage of melody notes you successfully touc
 ```
 
 4. Refresh browser and the new song will appear in dropdown!
-
-## 🔧 Troubleshooting
-
-### Camera not appearing
-- Ensure browser has camera access permission
-- Try another browser (Chrome recommended)
-- Check if camera is being used by another application
-
-### Song not playing
-- Check Console (F12) for errors
-- Ensure MIDI file exists in correct folder
-- Refresh page (F5)
-
-### Hand tracking inaccurate
-- Increase room lighting
-- Maintain 50-70cm distance from camera
-- Ensure hand is clearly visible
-- Use background that contrasts with skin tone
-
-### Server not running
-- Ensure Python is installed: `python --version`
-- Try another port if 8000 is in use: `python -m http.server 8080`
-- Check for firewall blocking
-
-## 📁 File Structure
-
-```
-d:/song/
-├── index.html          # Main HTML structure
-├── style.css           # Styling and animations
-├── script.js           # Game logic, MIDI parsing, hand tracking
-├── README.md           # This documentation
-└── *.mid              # MIDI song files
-```
 
 ## 📝 Important Notes
 

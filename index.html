@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -7,7 +9,7 @@
     <title>Piano Visualization</title>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 
     <!-- Google Fonts - Inter for modern UI -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,6 +64,7 @@
                     <option value="Yiruma - Rivers Flow In You.mid">River Flows In You</option>
                     <option value="7 years.mid">7 Years</option>
                     <option value="jumping machine.mid">Jumping Machine</option>
+                    <option value="ni hao bu hao.mid">Ni Hao Bu Hao</option>
                 </select>
             </div>
 
@@ -118,6 +121,9 @@
             <div class="spinner"></div>
             <p>Loading MIDI file...</p>
         </div>
+
+        <!-- Countdown Overlay -->
+        <div id="countdown" class="countdown hidden">3</div>
     </div>
 
     <!-- ==================== EXTERNAL LIBRARIES ==================== -->
@@ -136,7 +142,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
 
     <!-- Main application script -->
-    <script src="script.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 
 </html>
