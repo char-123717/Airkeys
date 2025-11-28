@@ -4,12 +4,12 @@ An interactive piano rhythm game that uses hand tracking to play piano songs in 
 
 ## ✨ Features
 
-- 🎵 **4 Piano Songs**: Kiss The Rain, River Flows In You, 7 Years, and Jumping Machine
-- 🎸 **4 Instruments**: Piano, Violin, Guitar, and Saxophone
+- 🎵 **6 Piano Songs**: Kiss The Rain, River Flows In You, 7 Years, Jumping Machine 跳樓機, ni hao bu hao 你好不好, zen me le 怎麽了
+- 🎸 **5 Instruments**: Piano, Violin, Guitar, Flute, Saxophone
 - 👋 **Hand Tracking**: Uses MediaPipe for real-time hand detection
 - 🎯 **Three Play Modes**:
   - **Fingers Mode**: Play with fingertips (5 points)
-  - **Palm Mode**: Play with entire hand (21 landmarks)
+  - **Palm Mode**: Play with more fingertips (21 landmarks)
   - **Solid hand mode**: Play with entire hand 
 - ⚡ **Speed Control**: 0.5x, 0.75x, and 1x
 - 📊 **Scoring System**: Calculate accuracy and achieve ratings (Perfect, Great, Good, Miss)
@@ -200,73 +200,6 @@ Press `Ctrl + C`
 
 ---
 
-### Method 4: Online IDE (No Installation Needed!) ☁️
-
-**Best for**: Quick demos, sharing projects, no local setup needed
-
-#### Option A: CodeSandbox (Recommended)
-
-1. Go to [codesandbox.io](https://codesandbox.io)
-2. Click **"Create Sandbox"**
-3. Choose **"Vanilla"** template
-4. Delete default files
-5. **Upload your files**:
-   - Drag & drop `index.html`, `style.css`, `script.js`
-   - Create `public` folder
-   - Upload all `.mid` files to `public` folder
-6. Update MIDI paths in code:
-   ```javascript
-   // Change from:
-   await loadMIDI('Kiss The Rain.mid');
-   // To:
-   await loadMIDI('/public/Kiss The Rain.mid');
-   ```
-7. Click **Preview** to run
-
-**Share link**: Click "Share" button to get shareable URL!
-
-#### Option B: StackBlitz
-
-1. Go to [stackblitz.com](https://stackblitz.com)
-2. Click **"Start a new project"**
-3. Choose **"HTML/CSS/JS"**
-4. Upload your files via file explorer
-5. Browser automatically shows preview
-
-**Advantage**: Runs entirely in browser, no server needed!
-
-#### Option C: Replit
-
-1. Go to [replit.com](https://replit.com)
-2. Click **"+ Create Repl"**
-3. Choose **"HTML, CSS, JS"** template
-4. Upload files via "Upload file" button
-5. Click **Run** button
-
-**Bonus**: Always online! Share link with friends.
-
----
-
-### Method 5: XAMPP / WAMP (Advanced)
-
-**Best for**: If you already use these for PHP/MySQL development
-
-#### XAMPP Setup:
-
-1. Install [XAMPP](https://www.apachefriends.org/)
-2. Copy project folder to `C:/xampp/htdocs/song`
-3. Start **Apache** in XAMPP Control Panel
-4. Open browser: `http://localhost/song`
-
-#### WAMP Setup:
-
-1. Install [WAMP](https://www.wampserver.com/)
-2. Copy project folder to `C:/wamp64/www/song`
-3. Start **WAMP** (icon turns green)
-4. Open browser: `http://localhost/song`
-
----
-
 ### Quick Comparison Table
 
 | Method | Difficulty | Auto-refresh | Installation | Best For |
@@ -274,13 +207,11 @@ Press `Ctrl + C`
 | Python | ⭐ Easy | ❌ No | None (usually) | Quick testing |
 | VS Code Live Server | ⭐⭐ Easy | ✅ Yes | VS Code + Extension | Active development |
 | Node.js http-server | ⭐⭐ Medium | ❌ No | Node.js + npm | Node developers |
-| Online IDE | ⭐ Easiest | ✅ Yes | None | Demos, sharing |
-| XAMPP/WAMP | ⭐⭐⭐ Advanced | ❌ No | Large install | Full stack devs |
 
 **My Recommendation**:
 - 🥇 **For development**: VS Code Live Server
 - 🥈 **For quick test**: Python HTTP Server  
-- 🥉 **For sharing**: CodeSandbox
+
 
 ---
 
@@ -300,7 +231,7 @@ Press `Ctrl + C`
 4. **Choose Settings**:
    - **Song**: Select song from dropdown
    - **Speed**: Adjust speed (start with 0.5x for beginners)
-   - **Style**: Choose Fingers or Palm mode
+   - **Style**: Choose Fingers, Palm or Solid hand mode
    - **Instrument**: Select instrument sound
 
 ### Playing the Game
@@ -313,8 +244,9 @@ Press `Ctrl + C`
 
 ### Tips
 
-- **Fingers Mode**: More accurate, use fingertips for precision
-- **Palm Mode**: Easier, use entire hand
+- **Fingers Mode**: Use 5 fingertips for precision
+- **Palm Mode**: More accurate, use 21 fingertips for precision
+- **Solid hand mode**: Easiest, use entire hand
 - **Hand Position**: Face camera with fingers spread
 - **Practice**: Start with 0.5x speed to learn timing
 
